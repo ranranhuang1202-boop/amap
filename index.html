@@ -20,7 +20,7 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:"PingFang SC","Hiragi
 .frame{position:absolute;top:0;left:0;overflow:hidden;border-radius:40px;border:2px solid rgba(255,255,255,.18);background:#0f1115;box-shadow:0 40px 80px rgba(0,0,0,.45),0 12px 32px rgba(0,0,0,.28);transform-origin:top left}
 #map{width:100%;height:100%}
 .poi-marker-host{width:max-content;height:max-content;pointer-events:none}
-:root{--poi-s:1;--poi-icon:64px;--poi-font:24px;--poi-stroke:2.8px;--poi-pad:3px;--poi-label-max:200px}
+:root{--poi-s:1;--poi-icon:64px;--poi-font:24px;--poi-stroke:2.8px;--poi-pad:2px;--poi-label-max:200px}
 .poi-style{
   display:inline-flex;align-items:center;user-select:none;
   --poi-text-color:#bb3e00;
@@ -80,12 +80,11 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:"PingFang SC","Hiragi
     gap:4px;
   }
   .theme-dock button{min-height:34px;font-size:10px;padding:6px 1px;white-space:normal;line-height:1.15}
-  :root{--poi-s:.56;--poi-icon:36px;--poi-font:13px;--poi-stroke:2.8px;--poi-pad:1.7px;--poi-label-max:112px}
+  :root{--poi-s:.56;--poi-icon:36px;--poi-font:13px;--poi-stroke:2.8px;--poi-pad:0.5px;--poi-label-max:112px}
   .poi-style__icon{width:36px!important;height:36px!important}
   .poi-style__icon img{width:36px!important;height:36px!important}
-  .poi-style__text{font-weight:400!important}
-  .poi-style__title{font-size:13px!important;font-weight:400!important;-webkit-text-stroke-width:2.8px!important;-webkit-text-stroke-color:rgba(255,255,255,.9)!important}
-  .poi-style__text{padding-left:1.7px!important;max-width:112px!important}
+  .poi-style__text{font-weight:500!important;padding-left:0.5px!important;max-width:112px!important}
+  .poi-style__title{font-size:13px!important;font-weight:500!important;-webkit-text-stroke-width:2.8px!important;-webkit-text-stroke-color:rgba(255,255,255,.9)!important}
 }
 </style>
 </head>
@@ -199,7 +198,7 @@ function lockPoiDomSize(){
   const icon = Math.round(64 * s);
   const font = Math.round(24 * s);
   const stroke = (isMobilePreview() ? 5.0 * s : 2.8 * s).toFixed(2) + 'px';
-  const pad = (3 * s).toFixed(2) + 'px';
+  const pad = ((isMobilePreview() ? 1.0 : 2.0) * s).toFixed(2) + 'px';
   const root = document.documentElement.style;
   root.setProperty('--poi-s', String(s));
   root.setProperty('--poi-icon', icon + 'px');
@@ -232,7 +231,7 @@ function lockPoiDomSize(){
     }
     if(title){
       title.style.setProperty('font-size', font+'px', 'important');
-      title.style.setProperty('font-weight', isMobilePreview()?'400':'700', 'important');
+      title.style.setProperty('font-weight', isMobilePreview()?'500':'700', 'important');
       title.style.webkitTextStrokeWidth=stroke;
       title.style.webkitTextStrokeColor='rgba(255,255,255,.9)';
     }
@@ -516,10 +515,10 @@ function createPoiEl(poi){
   const iconPx=Math.round(64*s);
   const fontPx=Math.round(24*s);
   const stroke=(isMobilePreview()?5.0*s:2.8*s).toFixed(2)+'px';
-  const pad=(3*s).toFixed(2)+'px';
+  const pad=((isMobilePreview()?1.0:2.0)*s).toFixed(2)+'px';
   const host=document.createElement('div');
   host.className='poi-marker-host';
-  const fw=isMobilePreview()?'400':'700';
+  const fw=isMobilePreview()?'500':'700';
   host.innerHTML='<div class="poi-style" style="--poi-text-color:'+preset.textColor+';--poi-icon:'+iconPx+'px;--poi-font:'+fontPx+'px;--poi-stroke:'+stroke+';--poi-pad:'+pad+'">'+
     '<div class="poi-style__icon" style="width:'+iconPx+'px;height:'+iconPx+'px"><img alt="" width="'+iconPx+'" height="'+iconPx+'" style="width:'+iconPx+'px;height:'+iconPx+'px" draggable="false" src="'+icon+'"/></div>'+
     '<div class="poi-style__text" style="padding-left:'+pad+';max-width:'+Math.round(200*s)+'px;font-weight:'+fw+'"><p class="poi-style__title" style="font-size:'+fontPx+'px;font-weight:'+fw+';-webkit-text-stroke:'+stroke+' rgba(255,255,255,.9)">'+poi.title+'</p></div></div>';
