@@ -1,0 +1,31 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon">
+<g id="&#232;&#131;&#140;&#230;&#153;&#175;">
+<mask id="mask0_0_4" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+<rect id="&#231;&#159;&#169;&#229;&#189;&#162;" width="64" height="64" fill="var(--fill-0, black)"/>
+</mask>
+<g mask="url(#mask0_0_4)">
+<g id="&#232;&#129;&#148;&#233;&#155;&#134; 7" filter="url(#filter0_d_0_4)">
+<circle cx="32" cy="32" r="22" fill="var(--fill-0, white)" fill-opacity="0.65"/>
+</g>
+<circle id="&#229;&#156;&#134;&#229;&#189;&#162; 333" cx="32" cy="32" r="18" fill="url(#paint0_linear_0_4)"/>
+</g>
+</g>
+<path id="&#229;&#189;&#162;&#231;&#138;&#182;&#231;&#187;&#147;&#229;&#144;&#136;" d="M36.522 21.6782C37.0092 21.6784 37.4038 22.0738 37.4038 22.561V23.2495H37.6167C37.6651 23.2495 37.7116 23.2723 37.7407 23.311L39.7368 25.9741C39.9346 26.2377 40.2452 26.3929 40.5747 26.3931C41.1532 26.3931 41.6223 26.8615 41.6226 27.4399V27.5718C41.6223 28.2225 41.0946 28.7495 40.4438 28.7495H37.6938V30.3247C38.9732 30.3653 40.0534 31.3023 40.2651 32.5727L41.2866 38.7046C41.3013 38.7931 41.302 38.8803 41.2915 38.9643H42.0151C42.666 38.9643 43.1938 39.4921 43.1938 40.1431C43.1937 40.7939 42.666 41.3218 42.0151 41.3218H22.3726C21.7217 41.3218 21.1939 40.7939 21.1938 40.1431C21.1938 39.4921 21.7216 38.9643 22.3726 38.9643H22.7729C22.7624 38.8803 22.7631 38.7931 22.7778 38.7046L23.8003 32.5727C24.0168 31.2738 25.1406 30.3208 26.4575 30.3208H26.6938V28.7495H23.9438C23.2932 28.7494 22.7654 28.2224 22.7651 27.5718V27.4399C22.7654 26.8616 23.2346 26.3931 23.813 26.3931C24.1426 26.3931 24.453 26.2376 24.6509 25.9741L26.6479 23.311C26.6605 23.2944 26.6763 23.2812 26.6938 23.271V22.561C26.6938 22.0738 27.0885 21.6784 27.5757 21.6782C27.9805 21.6782 28.3338 21.9536 28.4321 22.3462L28.6577 23.2495H35.4399L35.6655 22.3462C35.7639 21.9536 36.1172 21.6782 36.522 21.6782ZM32.1938 33.4634C30.4583 33.4634 29.0515 34.8704 29.0513 36.6059V38.9634H35.3364V36.6059C35.3362 34.8704 33.9295 33.4634 32.1938 33.4634ZM29.0503 30.3208H35.3364V28.7495H29.0503V30.3208Z" fill="var(--fill-0, white)"/>
+</g>
+<defs>
+<filter id="filter0_d_0_4" x="3.5" y="6.5" width="58" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="0.5" dy="3.5"/>
+<feGaussianBlur stdDeviation="3.5"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_4"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_4" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_0_4" x1="31.5137" y1="50.3245" x2="25.5" y2="14" gradientUnits="userSpaceOnUse">
+<stop offset="0.0652" stop-color="#8C5042"/>
+<stop offset="0.9546" stop-color="#C2896A"/>
+</linearGradient>
+</defs>
+</svg>

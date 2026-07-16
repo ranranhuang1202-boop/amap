@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <!-- Figma 1:4678 / icon 9:561：蓝底「文」+ 白色光晕，无灰底方块 -->
+  <defs>
+    <filter id="schoolGlow" x="3.5" y="6.5" width="58" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="0.5" dy="3.5"/>
+      <feGaussianBlur stdDeviation="3.5"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+    <linearGradient id="schoolBlue" x1="31.5137" y1="50.3245" x2="28.5" y2="14.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0315" stop-color="#0685DD"/>
+      <stop offset="0.9559" stop-color="#10C8F6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="22" fill="#FFFFFF" fill-opacity="0.65" filter="url(#schoolGlow)"/>
+  <circle cx="32" cy="32" r="18" fill="url(#schoolBlue)"/>
+  <path fill="#FFFFFF" d="M22.7188 26.5391C22.0312 26.4818 21.6589 26.1094 21.6016 25.4219C21.6589 24.7917 22.0312 24.4479 22.7188 24.3906H31.3125C31.026 23.5885 30.7396 22.8437 30.4531 22.1562C30.2812 21.4687 30.5964 21.0104 31.3984 20.7812C32.2005 20.6094 32.7161 20.8672 32.9453 21.5547C33.2318 22.2995 33.5182 23.1016 33.8047 23.9609C33.9193 24.0755 33.9193 24.2187 33.8047 24.3906H41.2812C41.9115 24.4479 42.2552 24.7917 42.3125 25.4219C42.2552 26.1094 41.9115 26.4818 41.2812 26.5391H38.6172C37.7578 30.2057 36.1536 33.2135 33.8047 35.5625C35.6953 36.8802 38.2448 37.9688 41.4531 38.8281C42.1979 39.0573 42.4557 39.5156 42.2266 40.2031C41.9401 41.0625 41.3099 41.349 40.3359 41.0625C36.7839 39.9167 33.9766 38.6276 31.9141 37.1953C29.8516 38.6276 27.1589 39.9453 23.8359 41.1484C22.9766 41.4349 22.3464 41.2057 21.9453 40.4609C21.7161 39.7161 21.9167 39.2292 22.5469 39C25.6979 37.9688 28.2188 36.8229 30.1094 35.5625C27.875 33.2135 26.2995 30.2057 25.3828 26.5391H22.7188ZM27.7891 26.5391C28.5911 29.5755 29.9661 32.0677 31.9141 34.0156C34.0911 32.0104 35.4661 29.5182 36.0391 26.5391H27.7891Z"/>
+</svg>
