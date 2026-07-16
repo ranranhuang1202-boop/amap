@@ -83,7 +83,8 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:"PingFang SC","Hiragi
   :root{--poi-s:.56;--poi-icon:36px;--poi-font:13px;--poi-stroke:2.8px;--poi-pad:1.7px;--poi-label-max:112px}
   .poi-style__icon{width:36px!important;height:36px!important}
   .poi-style__icon img{width:36px!important;height:36px!important}
-  .poi-style__title{font-size:13px!important;font-weight:700!important;-webkit-text-stroke-width:2.8px!important;-webkit-text-stroke-color:rgba(255,255,255,.95)!important}
+  .poi-style__text{font-weight:400!important}
+  .poi-style__title{font-size:13px!important;font-weight:400!important;-webkit-text-stroke-width:2.8px!important;-webkit-text-stroke-color:rgba(255,255,255,.9)!important}
   .poi-style__text{padding-left:1.7px!important;max-width:112px!important}
 }
 </style>
@@ -231,7 +232,7 @@ function lockPoiDomSize(){
     }
     if(title){
       title.style.setProperty('font-size', font+'px', 'important');
-      title.style.setProperty('font-weight', '700', 'important');
+      title.style.setProperty('font-weight', isMobilePreview()?'400':'700', 'important');
       title.style.webkitTextStrokeWidth=stroke;
       title.style.webkitTextStrokeColor='rgba(255,255,255,.9)';
     }
@@ -518,9 +519,10 @@ function createPoiEl(poi){
   const pad=(3*s).toFixed(2)+'px';
   const host=document.createElement('div');
   host.className='poi-marker-host';
+  const fw=isMobilePreview()?'400':'700';
   host.innerHTML='<div class="poi-style" style="--poi-text-color:'+preset.textColor+';--poi-icon:'+iconPx+'px;--poi-font:'+fontPx+'px;--poi-stroke:'+stroke+';--poi-pad:'+pad+'">'+
     '<div class="poi-style__icon" style="width:'+iconPx+'px;height:'+iconPx+'px"><img alt="" width="'+iconPx+'" height="'+iconPx+'" style="width:'+iconPx+'px;height:'+iconPx+'px" draggable="false" src="'+icon+'"/></div>'+
-    '<div class="poi-style__text" style="padding-left:'+pad+';max-width:'+Math.round(200*s)+'px"><p class="poi-style__title" style="font-size:'+fontPx+'px;font-weight:700;-webkit-text-stroke:'+stroke+' rgba(255,255,255,.9)">'+poi.title+'</p></div></div>';
+    '<div class="poi-style__text" style="padding-left:'+pad+';max-width:'+Math.round(200*s)+'px;font-weight:'+fw+'"><p class="poi-style__title" style="font-size:'+fontPx+'px;font-weight:'+fw+';-webkit-text-stroke:'+stroke+' rgba(255,255,255,.9)">'+poi.title+'</p></div></div>';
   return host;
 }
 
