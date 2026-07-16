@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>新版配色 · 地图预览</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior: none;
+      }
+      #map {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+      }
+      .badge {
+        position: fixed;
+        top: max(12px, env(safe-area-inset-top));
+        left: 50%;
+        z-index: 2;
+        transform: translateX(-50%);
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #1a1a1a;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        pointer-events: none;
+      }
+      .hint {
+        position: fixed;
+        left: 50%;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        z-index: 2;
+        transform: translateX(-50%);
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="badge">新版配色</div>
+    <div id="map"></div>
+    <div class="hint">双指缩放 · 单指拖动</div>
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script>
+      /** 新版配色（color2 = 配色1 + 主干路调浅） */
+      const THEME = {
+        background: '#ECF3F8',
+        park: '#B2ECA5',
+        water: '#84D4F9',
+        primaryRoad: '#B0C2D0',
+        primaryRoadCasing: '#9BB0C2',
+        secondaryRoad: '#D5D9DE',
+        secondaryRoadCasing: '#C8CCD1',
+        building: '#E2EAF0',
+        buildingOutline: '#D0DAE2',
+        aeroway: '#B8C6D4',
+        boundary: '#D4D7DB',
+        label: '#4A4F56',
+        labelHalo: '#ECF3F8',
+      };
+
+      const STYLE_URLS = [
+        'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+        'https://demotiles.maplibre.org/style.json',
+      ];
+
+      function isLabelSymbolLayer(layerId, layerType) {
+        if (layerType !== 'symbol') return false;
+        const id = layerId.toLowerCase();
+        return (
+          id.includes('label') ||
+          id.startsWith('place_') ||
+          id.includes('roadname') ||
+          id.includes('housenumber') ||
+          id.startsWith('poi_') ||
+          id.startsWith('watername_')
+        );
+      }
+
+      function isRoadCasingLayer(layerId) {
+        const id = layerId.toLowerCase();
+        return id.includes('casing') || id.includes('_case');
+      }
+
+      function resolveThemePaints(layerId, layerType, config) {
+        const id = layerId.toLowerCase();
+        const out = [];
+
+        if (layerType === 'background' || id === 'background' || id.includes('background')) {
+          out.push({ property: 'background-color', value: config.background });
+          return out;
+        }
+
+        if (
+          id.includes('landcover') ||
+          id.startsWith('park_') ||
+          (id.includes('park') && layerType === 'fill' && !id.includes('poi'))
+        ) {
+          if (layerType === 'fill') out.push({ property: 'fill-color', value: config.park });
+          return out;
+        }
+
+        if (id.includes('landuse') && layerType === 'fill') {
+          const green =
+            id.includes('grass') ||
+            id.includes('wood') ||
+            id.includes('forest') ||
+            id.includes('park') ||
+            id.includes('cemetery');
+          out.push({
+            property: 'fill-color',
+            value: green ? config.park : config.background,
+          });
+          return out;
+        }
+
+        if (isLabelSymbolLayer(layerId, layerType)) {
+          out.push({ property: 'text-color', value: config.label });
+          out.push({ property: 'text-halo-color', value: config.labelHalo });
+          return out;
+        }
+
+        if (id.includes('water') || id.includes('waterway')) {
+          if (layerType === 'fill' || layerType === 'background') {
+            out.push({ property: 'fill-color', value: config.water });
+          } else if (layerType === 'line') {
+            out.push({ property: 'line-color', value: config.water });
+          }
+          return out;
+        }
+
+        if (
+          id.includes('road') ||
+          id.includes('highway') ||
+          id.includes('tunnel') ||
+          id.includes('bridge') ||
+          id.includes('rail')
+        ) {
+          if (layerType !== 'line') return out;
+          const isMajor =
+            id.includes('motorway') ||
+            id.includes('mot_') ||
+            id.includes('trunk') ||
+            (id.includes('primary') && !id.includes('secondary')) ||
+            (id.includes('pri_') && !id.includes('sec'));
+          const isCasing = isRoadCasingLayer(layerId);
+          if (isMajor) {
+            out.push({
+              property: 'line-color',
+              value: isCasing
+                ? config.primaryRoadCasing || config.primaryRoad
+                : config.primaryRoad,
+            });
+            return out;
+          }
+          const isMinor =
+            id.includes('minor') || id.includes('service') || id.includes('path');
+          if (isMinor) {
+            out.push({
+              property: 'line-color',
+              value: isCasing
+                ? config.secondaryRoadCasing ||
+                  config.secondaryRoad ||
+                  config.primaryRoad
+                : config.secondaryRoad || config.primaryRoad,
+            });
+            return out;
+          }
+          out.push({
+            property: 'line-color',
+            value: config.secondaryRoad || config.primaryRoad,
+          });
+          return out;
+        }
+
+        if (id.includes('aeroway') && layerType === 'line') {
+          out.push({ property: 'line-color', value: config.aeroway });
+          return out;
+        }
+
+        if (id.includes('building') && layerType === 'fill') {
+          out.push({ property: 'fill-color', value: config.building });
+          if (id.includes('building-top')) {
+            out.push({
+              property: 'fill-outline-color',
+              value: config.buildingOutline || config.background,
+            });
+          }
+          return out;
+        }
+
+        if (id.includes('boundary') && layerType === 'line') {
+          out.push({ property: 'line-color', value: config.boundary });
+        }
+        return out;
+      }
+
+      function applyTheme(map, config) {
+        const layers = map.getStyle()?.layers || [];
+        for (const layer of layers) {
+          try {
+            const paints = resolveThemePaints(layer.id, layer.type, config);
+            for (const paint of paints) {
+              if (!paint.value) continue;
+              map.setPaintProperty(layer.id, paint.property, paint.value);
+            }
+            if (layer.id.includes('building-top') && layer.type === 'fill') {
+              map.setPaintProperty(
+                layer.id,
+                'fill-outline-color',
+                config.buildingOutline || config.background,
+              );
+            }
+          } catch (_) {
+            /* skip unsupported paint */
+          }
+        }
+      }
+
+      function boostLegibility(map) {
+        const layers = map.getStyle()?.layers || [];
+        for (const layer of layers) {
+          const id = layer.id.toLowerCase();
+          try {
+            if (layer.type === 'line' && (id.includes('road') || id.includes('highway'))) {
+              const w = map.getPaintProperty(layer.id, 'line-width');
+              if (typeof w === 'number') {
+                map.setPaintProperty(layer.id, 'line-width', w * 1.6);
+              }
+            }
+            if (layer.type === 'symbol' && id.includes('roadname')) {
+              map.setLayoutProperty(layer.id, 'text-size', 18);
+            }
+          } catch (_) {
+            /* ignore */
+          }
+        }
+      }
+
+      let styleIndex = 0;
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: STYLE_URLS[0],
+        center: [116.468, 39.988],
+        zoom: 15.35,
+        attributionControl: true,
+      });
+
+      map.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), 'top-right');
+
+      const paint = () => {
+        applyTheme(map, THEME);
+        boostLegibility(map);
+        map.resize();
+      };
+
+      map.on('load', paint);
+      map.on('style.load', paint);
+
+      map.on('error', (e) => {
+        const msg = String(e?.error?.message || e || '');
+        if (/source|sprite|glyph|tile|style/i.test(msg) && styleIndex < STYLE_URLS.length - 1) {
+          styleIndex += 1;
+          map.setStyle(STYLE_URLS[styleIndex]);
+        }
+      });
+
+      window.addEventListener('resize', () => map.resize());
+      window.addEventListener('orientationchange', () => setTimeout(() => map.resize(), 200));
+    </script>
+  </body>
+</html>
